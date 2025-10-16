@@ -1,0 +1,95 @@
+Detailed Explanation
+🎯 Purpose of the Script
+
+main.py is the interactive command-line interface (CLI) that controls the workflow of an Excel-driven script generator.
+It connects three major utility components:
+
+ExcelHandler → Reads and filters Excel data.
+
+FileWriter → Writes processed results to .txt files.
+
+Logger → Tracks every action for debugging and audit.
+
+This design separates concerns:
+
+The main script handles user interaction and workflow.
+
+Utilities handle specialized logic (I/O, Excel reading, logging).
+
+📚 Imported Libraries
+Library	Role
+pathlib.Path	Provides OS-independent file path operations (safer than string paths).
+typing.List	Enables static type hints for lists (improves clarity and IDE support).
+utils.excel_handler	Custom module that reads Excel sheets and extracts matching codes.
+utils.file_writer	Custom module that saves text files safely and handles directory creation.
+utils.logger	Centralized logger for consistent output to both file and console.
+
+
+⚙️ Key Python & OOP Concepts
+1. Encapsulation
+
+Each utility (ExcelHandler, FileWriter, Logger) encapsulates its own logic:
+
+The main script doesn’t care how Excel reading or file writing works internally.
+
+It just uses the class interfaces — a hallmark of encapsulation.
+
+2. Composition
+
+Rather than inheritance, the main function composes its logic using these utilities:
+
+handler = ExcelHandler(str(excel_file))
+writer = FileWriter(output_dir="output")
+
+
+This is an example of composition over inheritance, improving modularity.
+
+3. Error Handling
+
+The try...except block around the entire process ensures robust error capture.
+If anything fails (e.g., file not found, invalid input), the logger records it, and the user sees a friendly message.
+
+4. Type Hinting
+
+Throughout the code, functions declare expected types like:
+
+def display_menu(options: List[str]) -> None:
+
+
+This improves readability, IDE autocompletion, and maintainability.
+
+5. Entry Point Guard
+
+The Pythonic idiom:
+
+if __name__ == "__main__":
+    main()
+
+
+prevents accidental execution when importing main.py as a module — ensuring it only runs as a standalone CLI.
+
+6. Logging
+
+Instead of print statements, the program uses structured logs:
+
+logger.info("Selected sheets: %s", selected_sheets)
+
+
+This supports traceability and debugging without cluttering console output.
+
+7. List Comprehensions
+
+Used for compact parsing:
+
+ids = [s.strip() for s in raw.split(",") if s.strip()]
+
+
+This is both efficient and readable.
+
+🧩 Summary
+Aspect	Description
+Purpose	Interactive CLI that reads Excel data, extracts matching service codes, and outputs formatted text scripts.
+Key Components	ExcelHandler, FileWriter, and centralized Logger.
+Strengths	Modular design, strong logging, good error handling, user-friendly CLI.
+OOP Concepts	Encapsulation, composition, modular abstraction.
+Python Features Used	Pathlib, type hints, comprehensions, exception handling, logging, and CLI I/O.

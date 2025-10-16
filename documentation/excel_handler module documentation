@@ -1,0 +1,75 @@
+Detailed Explanation
+🔹 Purpose
+
+This module (excel_handler.py) automates the process of:
+
+Reading structured Excel files (like service configuration sheets).
+
+Searching for specific Service_IDs.
+
+Extracting associated numbers or codes (from sub-identifier columns).
+
+Cleaning and formatting those codes into standardized action line outputs.
+
+It helps engineers or automation scripts convert messy Excel data into ready-to-use configuration lines.
+
+🔹 Libraries Used
+Library	Purpose
+pandas	Provides high-performance data structures (DataFrame) for reading and manipulating Excel data.
+openpyxl	Acts as the engine used by pandas to read .xlsx Excel files.
+typing (List, Iterable)	Provides type hints for better readability and static analysis.
+utils.logger	A custom logging utility (likely wrapping Python’s logging module) to record events, errors, and operations.
+
+
+🔹 OOP (Object-Oriented Programming) Concepts
+Concept	How It Appears in Code
+Class	The ExcelHandler class encapsulates all Excel-related logic.
+Encapsulation	The class hides implementation details (like pandas parsing) behind clean public methods (sheet_names, find_service_codes, etc.).
+Abstraction	The caller doesn’t need to know how pandas works — they just call find_service_codes() to get results.
+Static Methods	clean_codes() and format_action_lines() don’t depend on instance state, so they’re marked @staticmethod.
+Constructor (__init__)	Initializes and validates the Excel file once, caching data for later reuse.
+Composition	The class uses a pandas.ExcelFile object internally as part of its behavior.
+
+
+🔹 Other Python Concepts
+Concept	Description
+Exception Handling	try/except blocks handle file reading errors and log them gracefully.
+Logging	Uses a structured logging approach (logger.info, logger.warning, logger.exception).
+List Comprehensions & Generators	Used to find columns dynamically (next((c for c in df.columns if ...), None)).
+Type Hinting	Improves code clarity and IDE support.
+Functional Programming	Use of map-like iteration patterns (e.g., for raw in codes:).
+String Manipulation	For normalizing, cleaning, and formatting text data efficiently.
+
+⚙️ How It Fits in a Project
+
+In a larger automation system (e.g., SMS routing, telecom provisioning, or configuration management), this class could be used as follows:
+
+Input: An Excel file like MO_Connection_Database.xlsx containing multiple services and phone codes.
+
+Process:
+
+Instantiate ExcelHandler("data/MO_Connection_Database.xlsx")
+
+For each service, run find_service_codes(sheet, service_id)
+
+Clean codes with clean_codes()
+
+Format with format_action_lines()
+
+Output: A ready-to-export text or config file used by another system or script.
+
+🧩 Summary
+
+Purpose: Automate Excel data extraction and conversion to configuration lines.
+
+Design: Object-oriented, modular, and reusable.
+
+Strengths:
+
+Case-insensitive search
+
+Robust error handling
+
+Clean separation of responsibilities
+
+Readable, testable methods

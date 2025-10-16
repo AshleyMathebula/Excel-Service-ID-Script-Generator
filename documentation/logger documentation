@@ -1,0 +1,49 @@
+Detailed Explanation
+🔹 Purpose
+
+This module standardizes logging across your project.
+Instead of configuring logging separately in every module, you import and reuse a single function (setup_logger),
+which ensures:
+
+Every module logs with the same format.
+
+Logs are stored in a common logs/activity.log file.
+
+Logs also appear on the console for immediate feedback.
+
+Duplicate logs are avoided even if setup is called multiple times.
+
+🔹 Libraries Used
+Library	Description
+logging	Python’s built-in logging framework — manages log levels, handlers, formatters, and propagation.
+os	Used to create directories (os.makedirs) and build file paths (os.path.join).
+typing.Optional	Allows function parameter type hints to indicate an argument may be None.
+🔹 OOP (Object-Oriented Programming) Relationship
+
+Even though this module doesn’t explicitly define a class, it interacts heavily with OOP objects from Python’s logging module:
+
+Concept	Application
+Encapsulation	Hides logging setup logic behind the single setup_logger function — users don’t need to manage handlers or formatters.
+Composition	Combines different objects (Logger, Handler, Formatter) to form a complete logging system.
+Abstraction	Simplifies usage — modules only need to call setup_logger(name) to get a working logger.
+Singleton-like pattern	Ensures one instance of the logger per module by checking if logger.handlers: before reconfiguring.
+
+🔹 Python Concepts Demonstrated
+Concept	Explanation
+Idempotency	The function can be called multiple times safely without creating duplicate handlers or repeated logs.
+Modularity	Keeps all logging setup in one place (utils/logger.py) for reusability and consistency.
+File and Stream Handlers	Demonstrates using multiple handlers: one for file output, one for console output.
+Formatted Strings	Custom log format includes timestamp, severity level, logger name, and message for traceability.
+Logging Levels	INFO is used here, but can be changed to DEBUG, WARNING, ERROR, or CRITICAL.
+Directory Handling	os.makedirs(..., exist_ok=True) ensures the logs/ directory is always available.
+UTF-8 Encoding	Ensures log files handle special characters safely across systems.
+
+
+🧩 Summary
+
+Category	Description
+Purpose	Provides centralized, consistent logging setup for all modules.
+Design Pattern	Singleton-like utility function ensuring no duplicate logger configuration.
+OOP Concepts	Composition and encapsulation using Logger, Handler, and Formatter objects.
+Benefits	Unified logs, both file and console output, easily traceable debugging information.
+Integration	Used by other utilities (excel_handler.py, file_writer.py) for consistent event tracking.

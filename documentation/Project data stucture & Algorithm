@@ -1,0 +1,130 @@
+Project Algorithm & Data Structure Documentation
+
+1. Project Overview
+
+The Excel Service ID Script Generator is an interactive CLI tool designed to:
+
+Read Excel workbooks containing service data.
+
+Search for user-specified Service_IDs.
+
+Extract and clean associated numbers/codes.
+
+Generate structured text scripts for each Service_ID.
+
+Save results to .txt files while logging all operations.
+
+The project uses Python OOP principles to organize responsibilities across three main modules:
+
+ExcelHandler → Excel reading and code extraction.
+
+FileWriter → File output management.
+
+Logger → Centralized logging for traceability.
+
+2. Algorithm Documentation
+
+2.1 High-Level Algorithm
+
+The core algorithm can be described as a sequential ETL (Extract–Transform–Load) pipeline:
+
+Excel → Filter (Service_ID match)
+       → Map (Clean codes)
+       → Map (Format as action lines)
+       → Reduce (Write to .txt)
+
+
+Algorithmic Steps (Pseudocode)
+
+ALGORITHM Generate_Service_ID_Scripts
+INPUT: ExcelFile, SelectedSheets[], ServiceIDs[]
+OUTPUT: Text files per (Sheet, Service_ID)
+
+FOR each sheet IN SelectedSheets:
+    FOR each service_id IN ServiceIDs:
+        username ← prompt("Enter username for service_id")
+        rows ← find_rows_in_sheet(sheet, where service_id == "Service_" + service_id)
+        IF rows is empty:
+            log "No records found"
+        ELSE:
+            cleaned_codes ← map(clean_code, rows)
+            action_lines ← map(format_action_line(username), cleaned_codes)
+            write_to_file(action_lines, output_dir)
+            log "Wrote file successfully"
+        ENDIF
+    ENDFOR
+ENDFOR
+
+2.2 Detailed Algorithm Components
+Step	Description	Function / Method
+Input collection	Gather Excel path, sheets, Service_IDs, and usernames	input(), parse_indices(), input_service_ids()
+Sheet selection	List available sheets and allow selection	ExcelHandler.sheet_names(), display_menu()
+Data extraction	Filter Excel rows by Service_ID	ExcelHandler.find_service_codes()
+Data cleaning	Normalize codes (remove ?, spaces, hyphens)	ExcelHandler.clean_codes()
+Data transformation	Format codes into action lines	ExcelHandler.format_action_lines()
+Output	Save formatted lines to .txt file	FileWriter.write_text_file()
+Logging	Track all actions, errors, and summary	logger.info(), logger.error()
+
+2.3 Algorithmic Pattern
+
+Map–Filter–Reduce Pattern:
+
+Filter: Select only rows with matching Service_ID.
+
+Map: Apply cleaning and formatting to each number/code.
+
+Reduce: Aggregate formatted lines and write them to output files.
+
+Time Complexity: O(n) per sheet (linear scan through rows)
+
+Space Complexity: O(n) per sheet (stores filtered rows and cleaned codes)
+
+2.4 Potential Optimizations
+
+Dictionary-based indexing: Precompute {Service_ID: rows} for O(1) lookups.
+
+Set-based deduplication: Eliminate duplicate numbers efficiently.
+
+Parallel sheet processing: Use threads or multiprocessing for multiple sheets.
+
+Chunked Excel reading: For very large files, use Pandas chunksize.
+
+3. Data Structure Documentation
+
+3.1 Explicit Python Data Structures
+Data Structure	Usage	Justification
+List (list)	Store rows, cleaned codes, action lines	Ordered sequence, supports iteration and indexing
+Dictionary (dict)	Map Service_ID → username or Service_ID → filtered rows	Fast key-based lookup (average O(1))
+Set (set)	Remove duplicates from extracted codes	Ensures uniqueness, fast membership check
+Tuple (tuple)	Represent multiple attributes for a record (optional)	Immutable, lightweight container
+String (str)	Store Service_IDs, usernames, numbers, action lines	Python’s string methods and slicing make processing easy
+Path (pathlib.Path)	Represent filesystem paths	OS-independent, easy path manipulations
+DataFrame (pandas.DataFrame)	Read and manipulate Excel sheets	Handles tabular data, supports filtering, vectorized operations
+
+3.2 Implicit / Conceptual Data Structures
+Concept	Implementation in Project
+Processing queue	Iteration over rows in Excel sheets (for row in df)
+Mapping table	Service_ID → list of sub-identifiers (dict[str, list[str]])
+Unique result set	Cleaned codes after deduplication (set)
+Output buffer	Lines to write to .txt file (list[str])
+
+3.3 Example Data Flow Through Structures
+Excel sheet (DataFrame)
+     ↓  filter by Service_ID
+Filtered rows (list of rows)
+     ↓  extract sub-identifiers
+Codes (list[str])
+     ↓  clean/normalize
+Cleaned codes (list[str] or set[str])
+     ↓  format as action lines
+Action lines (list[str])
+     ↓  write to file
+Text file (output on disk)
+
+4. Summary
+Aspect	Description
+Algorithm	Sequential ETL pipeline using Map–Filter–Reduce principles. Linear scan for Service_ID search, followed by cleaning, transformation, and output.
+Data Structures	Combines list, dict, set, tuple, string, Path, DataFrame to handle tabular data, filtering, mapping, and output serialization.
+Complexity	Linear (O(n)) in time per sheet, O(n) space per sheet.
+Scalability	Could add hash-based lookup, multithreading, batch processing, or external DB storage.
+OOP Design	Encapsulation and composition separate data operations (ExcelHandler), file I/O (FileWriter), and logging (Logger).
