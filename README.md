@@ -6,27 +6,27 @@ Ideal for telecom engineers, system administrators, and integration developers h
 
 ## 📚 Table of Contents
 
-Overview
-
-Features
-
-Installation
-
-Dependencies
-
-Usage
-
-Example CLI Session
-
-Output Example
-
-Project Structure
-
-Algorithm & Data Structures
-
-Logging
-
-License
+    Overview
+    
+    Features
+    
+    Installation
+    
+    Dependencies
+    
+    Usage
+    
+    Example CLI Session
+    
+    Output Example
+    
+    Project Structure
+    
+    Algorithm & Data Structures
+    
+    Logging
+    
+    License
 
 ## 🧠 Overview
 
@@ -65,9 +65,9 @@ cd excel-service-id-generator
 
 2. Create and activate a virtual environment:
 python -m venv venv
-# Linux/macOS
+Linux/macOS
 source venv/bin/activate
-# Windows
+Windows
 venv\Scripts\activate
 
 3. Install dependencies:
