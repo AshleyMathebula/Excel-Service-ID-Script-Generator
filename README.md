@@ -106,9 +106,8 @@ Workflow:
 - Scripts are saved in the output/ directory
 
 ## 💻 Example CLI Session
-================================================================================
+
 Excel Service ID Script Generator
-================================================================================
 
 Enter Excel file path (press Enter to use data/MO_Connection Database.xlsx):
 Available sheets:
@@ -130,14 +129,14 @@ Enter username (destination) for Service_ID 2041: cellnew
 • Sheet: Billing_Data_Oct | Service_1056 | User: cellfsc | Codes found: 40  
 • Sheet: Billing_Data_Oct | Service_2041 | User: cellnew | Codes found: 25  
 
-================================================================================
+
 Summary of results:
-================================================================================
+
 Sheet: Billing_Data_Sep | Service_1056 | User: cellfsc | Total: 32  
 Sheet: Billing_Data_Sep | Service_2041 | User: cellnew | Total: 18  
 Sheet: Billing_Data_Oct | Service_1056 | User: cellfsc | Total: 40  
 Sheet: Billing_Data_Oct | Service_2041 | User: cellnew | Total: 25  
-================================================================================
+
 Proceed to generate scripts for these records? (y/n): y
 
 ✅ Generated 32 lines → Billing_Data_Sep_1056_script.txt  
