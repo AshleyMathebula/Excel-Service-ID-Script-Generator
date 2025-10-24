@@ -1,119 +1,113 @@
 ## 🧮 Excel Service ID Script Generator
 
-Interactive CLI tool to extract Service_IDs from Excel workbooks, preview record counts, and generate automated action scripts.
+A powerful interactive Python CLI tool that automates the extraction of Service_ID data from Excel workbooks and generates ready-to-use action scripts.
+
+Ideal for telecom engineers, system administrators, and integration developers handling batch configuration or routing scripts.
 
 ## 📚 Table of Contents
 
     Overview
-
+    
     Features
-
+    
     Installation
-
+    
+    Dependencies
+    
     Usage
-
+    
     Example CLI Session
-
+    
     Output Example
-
+    
     Project Structure
-
+    
     Algorithm & Data Structures
-
+    
     Logging
-
+    
     License
 
 ## 🧠 Overview
 
-The Excel Service ID Script Generator is a Python CLI tool designed to automate the process of extracting service-related data from Excel workbooks and generating formatted action scripts.
+The Excel Service ID Script Generator simplifies the process of scanning Excel workbooks, finding specific Service_ID values, and generating formatted configuration scripts.
 
 It allows users to:
 
-- Read Excel workbooks containing telecom or service configuration data.
+- Read Excel workbooks containing service or telecom configuration data.
 
-- Select specific sheets or process all sheets at once.
+- Select one, multiple, or all sheets dynamically.
 
-- Input one or multiple Service_IDs and their associated usernames.
+- Enter one or more Service_IDs and associate them with usernames.
 
-- Automatically extract and clean related codes or numbers.
+- Clean and normalize service codes automatically.
 
-- Preview record counts before generating scripts.
+- Preview record counts per Service_ID before generating scripts.
 
-- Generate ready-to-use action script files in a structured output directory.
+- Generate formatted script files for import or deployment.
 
-- Keep full activity logs for audit and traceability.
-
-This tool is especially useful for telecom engineers, system administrators, and integration developers who handle batch configuration or routing scripts based on Service_IDs.
+- Keep detailed activity logs for traceability and audits.
 
 ## ✨ Features
 
-✅ Interactive CLI with dynamic sheet selection (all or specific sheets).
-✅ Pre-generation summary of how many records exist per Service_ID in each sheet.
-✅ Case-insensitive search for Service_<ID> patterns.
-✅ Automatic code cleaning: removes ?, trims whitespace, and normalizes hyphens.
-✅ Generates formatted action lines ready for system import.
-✅ Organized output directory: output/.
-✅ Centralized logging of all operations in logs/activity.log.
-✅ Error handling for missing files, invalid sheet names, and malformed input.
+✅ Interactive CLI with sheet selection (all or specific by number).
+✅ Pre-generation summary showing record counts per Service_ID.
+✅ Case-insensitive matching for Service_<ID> patterns.
+✅ Automatic data cleaning (removes ?, trims spaces, fixes hyphens).
+✅ Organized output directory structure (output/).
+✅ Centralized logging in logs/activity.log.
+✅ Graceful error handling for missing files, invalid sheets, or malformed input.
 
 ## ⚙️ Installation
-
-Clone the repository:
-
+1. Clone the repository:
 git clone https://github.com/your-username/excel-service-id-generator.git
 cd excel-service-id-generator
 
-
-Create a virtual environment (recommended):
-
+2. Create and activate a virtual environment:
 python -m venv venv
-source venv/bin/activate   # Linux/macOS
-venv\Scripts\activate      # Windows
+Linux/macOS
+source venv/bin/activate
+Windows
+venv\Scripts\activate
 
-
-Install dependencies:
-
+3. Install dependencies:
 pip install -r requirements.txt
 
 ## 🧩 Dependencies
 
-- pandas — Excel processing
+- pandas — Excel processing and data handling
 
 - openpyxl — Excel engine
 
-- pathlib — file path handling
+- pathlib — Path management
 
-- logging — centralized log management
+- logging — Activity tracking and debugging
 
 ## 🚀 Usage
 
-Run the interactive CLI:
+Run the tool interactively:
 
 python main.py
 
-Workflow
+Workflow:
 
-Enter the path to your Excel file (default: data/MO_Connection Database.xlsx)
+- Enter the path to your Excel file (default: data/MO_Connection Database.xlsx)
 
-Select sheets by number (e.g., 1,3) or type all
+- Select sheets by number (e.g., 1,3) or type all
 
-Enter one or more Service_IDs (comma-separated)
+- Enter one or more Service_IDs (comma-separated)
 
-Provide a username (destination) for each Service_ID
+- Provide usernames for each Service_ID
 
-The program counts matching records in each sheet
+- Preview record counts for each sheet and ID
 
-A summary table is displayed before generation
+- Confirm to generate scripts
 
-Confirm whether to proceed (y/n)
+- Scripts are saved in the output/ directory
 
-Scripts are generated in the output/ directory
+## 💻 Example CLI Session
 
-💻 Example CLI Session
-================================================================================
 Excel Service ID Script Generator
-================================================================================
 
 Enter Excel file path (press Enter to use data/MO_Connection Database.xlsx):
 Available sheets:
@@ -128,40 +122,42 @@ Enter one or more Service_IDs (comma-separated): 1056,2041
 Enter username (destination) for Service_ID 1056: cellfsc
 Enter username (destination) for Service_ID 2041: cellnew
 
-## 📊 Scanning sheets for matching records...
+📊 Scanning sheets for matching records...
 
-  • Sheet: Billing_Data_Sep      | Service_1056 | User: cellfsc         | Codes found: 32
-  • Sheet: Billing_Data_Sep      | Service_2041 | User: cellnew         | Codes found: 18
-  • Sheet: Billing_Data_Oct      | Service_1056 | User: cellfsc         | Codes found: 40
-  • Sheet: Billing_Data_Oct      | Service_2041 | User: cellnew         | Codes found: 25
+• Sheet: Billing_Data_Sep | Service_1056 | User: cellfsc | Codes found: 32  
+• Sheet: Billing_Data_Sep | Service_2041 | User: cellnew | Codes found: 18  
+• Sheet: Billing_Data_Oct | Service_1056 | User: cellfsc | Codes found: 40  
+• Sheet: Billing_Data_Oct | Service_2041 | User: cellnew | Codes found: 25  
 
-================================================================================
+
 Summary of results:
-================================================================================
-Sheet: Billing_Data_Sep          | Service_1056 | User: cellfsc         | Total: 32
-Sheet: Billing_Data_Sep          | Service_2041 | User: cellnew         | Total: 18
-Sheet: Billing_Data_Oct          | Service_1056 | User: cellfsc         | Total: 40
-Sheet: Billing_Data_Oct          | Service_2041 | User: cellnew         | Total: 25
-================================================================================
+
+Sheet: Billing_Data_Sep | Service_1056 | User: cellfsc | Total: 32  
+Sheet: Billing_Data_Sep | Service_2041 | User: cellnew | Total: 18  
+Sheet: Billing_Data_Oct | Service_1056 | User: cellfsc | Total: 40  
+Sheet: Billing_Data_Oct | Service_2041 | User: cellnew | Total: 25  
+
 Proceed to generate scripts for these records? (y/n): y
 
-✅ Generated 32 lines for Billing_Data_Sep → Billing_Data_Sep_1056_script.txt
-✅ Generated 40 lines for Billing_Data_Oct → Billing_Data_Oct_1056_script.txt
-✅ Generated 18 lines for Billing_Data_Sep → Billing_Data_Sep_2041_script.txt
-✅ Generated 25 lines for Billing_Data_Oct → Billing_Data_Oct_2041_script.txt
+✅ Generated 32 lines → Billing_Data_Sep_1056_script.txt  
+✅ Generated 40 lines → Billing_Data_Oct_1056_script.txt  
+✅ Generated 18 lines → Billing_Data_Sep_2041_script.txt  
+✅ Generated 25 lines → Billing_Data_Oct_2041_script.txt  
 
 🎉 Done! Processed 115 total records across selected sheets.
 
 ## 🧾 Output Example
 
-Example output filename:
+Output Directory:
 
-output/Billing_Data_Sep_1056_script.txt
+output/
+  ├─ Billing_Data_Sep_1056_script.txt
+  ├─ Billing_Data_Oct_1056_script.txt
 
 
-Example action line:
+Example Line:
 
-{ "?.?.27840001402" }  : Actions SET_DEST_LA("cellfsc"),SET_ESME_GROUP(SAG_GROUP_1, A_ADDR)
+{ "?.?.27840001402" } : Actions SET_DEST_LA("cellfsc"), SET_ESME_GROUP(SAG_GROUP_1, A_ADDR)
 
 ## 🗂️ Project Structure
 excel-service-id-generator/
@@ -171,58 +167,56 @@ excel-service-id-generator/
 ├─ output/                     # Generated scripts
 │
 ├─ utils/
-│  ├─ excel_handler.py         # Excel reading, Service_ID search, code cleaning
+│  ├─ excel_handler.py         # Excel reading, ID search, and code cleaning
 │  ├─ file_writer.py           # File writing helper
 │  └─ logger.py                # Centralized logging setup
 │
-├─ main.py                     # Interactive CLI entry point (Enhanced)
+├─ main.py                     # Interactive CLI entry point
 ├─ requirements.txt            # Python dependencies
 └─ README.md                   # Project documentation
 
 ## 🧩 Algorithm & Data Structures
 Algorithm
 
-Implements an ETL pipeline (Extract → Transform → Load):
+Implements a simple ETL pipeline:
+Extract → Transform → Load
 
-Extract Excel rows by matching Service_ID.
+Extract: Filter Excel rows by matching Service_ID.
 
-Transform codes (clean, deduplicate, format).
+Transform: Clean, normalize, and deduplicate codes.
 
-Load results into structured .txt output files.
+Load: Generate formatted .txt output files.
 
-Employs Map–Filter–Reduce style processing for clarity and efficiency.
-
-## Data Structures Used
+Data Structures
 Type	Purpose
-list	Store filtered rows, cleaned codes, action lines
-dict	Map Service_ID → username or service data
-set	Remove duplicates
-tuple	Temporary structured storage
-str	Store identifiers and formatted output
+list	Store filtered rows and formatted lines
+dict	Map Service_ID → username or records
+set	Remove duplicate codes
+tuple	Temporary structured data
 pandas.DataFrame	Represent Excel sheets
-pathlib.Path	Safe filesystem operations
+pathlib.Path	Safe and portable file operations
 
 Time Complexity: O(n) per sheet
 Space Complexity: O(n) per sheet
 
 ## 🧾 Logging
 
-All operations are logged both to the console and to a rotating log file:
+Logs are written both to the console and to:
 
 logs/activity.log
 
 
-Log entries include:
+Log Includes:
 
-File loading and validation
+- Excel file loading
 
-Sheet selection and Service_ID parsing
+- Sheet and Service_ID selections
 
-Record counts and summary results
+- Record counts per sheet
 
-Output file creation
+- Output file creation
 
-Errors or exceptions
+- Errors and exceptions
 
 Example:
 
@@ -233,4 +227,5 @@ Example:
 
 MIT License © 2025
 Developed by Ashley Mathebula (@Nika)
-Feel free to use, modify, and distribute with attribution.
+
+Feel free to use, modify, and distribute with proper attribution.
