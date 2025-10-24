@@ -34,19 +34,19 @@ The Excel Service ID Script Generator simplifies the process of scanning Excel w
 
 It allows users to:
 
-Read Excel workbooks containing service or telecom configuration data.
+- Read Excel workbooks containing service or telecom configuration data.
 
-Select one, multiple, or all sheets dynamically.
+- Select one, multiple, or all sheets dynamically.
 
-Enter one or more Service_IDs and associate them with usernames.
+- Enter one or more Service_IDs and associate them with usernames.
 
-Clean and normalize service codes automatically.
+- Clean and normalize service codes automatically.
 
-Preview record counts per Service_ID before generating scripts.
+- Preview record counts per Service_ID before generating scripts.
 
-Generate formatted script files for import or deployment.
+- Generate formatted script files for import or deployment.
 
-Keep detailed activity logs for traceability and audits.
+- Keep detailed activity logs for traceability and audits.
 
 ## ✨ Features
 
@@ -75,13 +75,13 @@ pip install -r requirements.txt
 
 ## 🧩 Dependencies
 
-pandas — Excel processing and data handling
+- pandas — Excel processing and data handling
 
-openpyxl — Excel engine
+- openpyxl — Excel engine
 
-pathlib — Path management
+- pathlib — Path management
 
-logging — Activity tracking and debugging
+- logging — Activity tracking and debugging
 
 ## 🚀 Usage
 
@@ -91,19 +91,19 @@ python main.py
 
 Workflow:
 
-Enter the path to your Excel file (default: data/MO_Connection Database.xlsx)
+- Enter the path to your Excel file (default: data/MO_Connection Database.xlsx)
 
-Select sheets by number (e.g., 1,3) or type all
+- Select sheets by number (e.g., 1,3) or type all
 
-Enter one or more Service_IDs (comma-separated)
+- Enter one or more Service_IDs (comma-separated)
 
-Provide usernames for each Service_ID
+- Provide usernames for each Service_ID
 
-Preview record counts for each sheet and ID
+- Preview record counts for each sheet and ID
 
-Confirm to generate scripts
+- Confirm to generate scripts
 
-Scripts are saved in the output/ directory
+- Scripts are saved in the output/ directory
 
 ## 💻 Example CLI Session
 ================================================================================
@@ -209,15 +209,15 @@ logs/activity.log
 
 Log Includes:
 
-Excel file loading
+- Excel file loading
 
-Sheet and Service_ID selections
+- Sheet and Service_ID selections
 
-Record counts per sheet
+- Record counts per sheet
 
-Output file creation
+- Output file creation
 
-Errors and exceptions
+- Errors and exceptions
 
 Example:
 
