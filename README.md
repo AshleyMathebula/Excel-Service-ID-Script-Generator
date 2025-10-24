@@ -128,7 +128,7 @@ Enter one or more Service_IDs (comma-separated): 1056,2041
 Enter username (destination) for Service_ID 1056: cellfsc
 Enter username (destination) for Service_ID 2041: cellnew
 
-## 📊 Scanning sheets for matching records...
+ 📊 Scanning sheets for matching records...
 
   • Sheet: Billing_Data_Sep      | Service_1056 | User: cellfsc         | Codes found: 32
   • Sheet: Billing_Data_Sep      | Service_2041 | User: cellnew         | Codes found: 18
