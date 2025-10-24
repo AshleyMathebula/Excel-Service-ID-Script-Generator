@@ -18,7 +18,7 @@ from typing import List, Iterable
 import pandas as pd
 from utils.logger import setup_logger  # Custom logger utility
 
-# Initialize a logger specific to this module
+# Initialize a logger specific to this module for tracking activity and errors
 logger = setup_logger("excel_handler")
 
 
@@ -40,12 +40,13 @@ class ExcelHandler:
         Raises:
             FileNotFoundError: If the file cannot be opened or read.
         """
-        self.path = excel_path
+        self.path = excel_path  # Store the path for reference later
         try:
-            # Use pandas.ExcelFile for efficient lazy sheet reading (does not load all at once)
+            # Use pandas.ExcelFile for efficient lazy sheet reading (does not load all sheets into memory)
             self._excel = pd.ExcelFile(self.path, engine="openpyxl")
             logger.info("Loaded Excel file: %s", self.path)
         except Exception as e:
+            # Log and raise a descriptive error if the file cannot be opened
             logger.exception("Failed to open Excel file: %s", e)
             raise FileNotFoundError(f"Could not open Excel file: {e}")
 
@@ -56,6 +57,7 @@ class ExcelHandler:
         Returns:
             List[str]: List of sheet names.
         """
+        # ExcelFile already stores all sheet names after being opened
         return self._excel.sheet_names
 
     def find_service_codes(self, sheet_name: str, service_id: str) -> List[str]:
@@ -78,50 +80,59 @@ class ExcelHandler:
             List[str]: Unique codes linked to the service.
         """
         try:
+            # Parse the target sheet into a pandas DataFrame
             df = self._excel.parse(sheet_name)
         except Exception as e:
+            # If the sheet cannot be read, log a warning and return an empty list
             logger.warning("Unable to read sheet %s: %s", sheet_name, e)
             return []
 
-        # Normalize column names (lowercase + stripped whitespace)
+        # Normalize all column names (convert to lowercase and strip extra whitespace)
         df.columns = [str(c).lower().strip() for c in df.columns]
 
-        # Detect the column that likely holds service IDs
+        # Try to identify which column holds the service IDs (e.g., "service_id")
         svc_col = next((c for c in df.columns if "service" in c and "id" in c), None)
         if not svc_col:
+            # If no valid service ID column exists, log a warning and skip this sheet
             logger.warning("Sheet '%s' missing 'service_id' column.", sheet_name)
             return []
 
-        # Normalize service_id to ensure it has the "service_" prefix
+        # Ensure that the provided service_id has the proper prefix "service_"
         normalized_service = str(service_id).strip()
         if not normalized_service.lower().startswith("service_"):
             normalized_service = f"service_{normalized_service}"
 
-        # Boolean mask to select matching rows
+        # Build a boolean mask to select all rows matching the target service_id
         mask = df[svc_col].astype(str).str.strip().str.lower() == normalized_service.lower()
-        filtered = df.loc[mask]
+        filtered = df.loc[mask]  # Subset DataFrame containing only matching rows
 
-        # If no matching rows, return empty
+        # If no rows match, return an empty list
         if filtered.empty:
             return []
 
-        # Find the 'sub-identifier' column (used to extract the numbers/codes)
+        # Try to identify which column holds the sub-identifiers / codes
         sub_col = next((c for c in df.columns if "sub" in c and "identifier" in c), None)
         if not sub_col:
+            # If missing, log a warning and return nothing
             logger.warning("No 'sub-identifier' column found in sheet '%s'.", sheet_name)
             return []
 
-        # Extract codes, remove NaNs and duplicates
+        # Extract all codes from the 'sub-identifier' column
+        # Filter out NaN or empty values
         codes = [str(v).strip() for v in filtered[sub_col] if pd.notna(v) and str(v).strip()]
-        unique_codes = list(dict.fromkeys(codes))  # preserves order
 
+        # Remove duplicates while preserving order using dict.fromkeys()
+        unique_codes = list(dict.fromkeys(codes))
+
+        # Log how many unique codes were found for this service and sheet
         logger.info(
             "Found %d raw code(s) for %s in sheet=%s",
             len(unique_codes),
             normalized_service,
             sheet_name,
         )
-        return unique_codes
+
+        return unique_codes  # Return final list of unique codes
 
     @staticmethod
     def clean_codes(codes: Iterable[str]) -> List[str]:
@@ -141,12 +152,13 @@ class ExcelHandler:
         Returns:
             List[str]: Cleaned, normalized codes.
         """
-        cleaned = []
+        cleaned = []  # Store cleaned results
         for raw in codes:
-            s = str(raw).strip()
+            s = str(raw).strip()  # Convert to string and remove leading/trailing spaces
             if not s:
-                continue
-            # Remove unwanted characters
+                continue  # Skip empty entries
+
+            # Remove unwanted characters but keep asterisks intact
             s = s.replace("?", "").replace(" ", "").replace("-", "")
             if s:
                 cleaned.append(s)
@@ -167,11 +179,15 @@ class ExcelHandler:
         Returns:
             List[str]: Formatted strings ready for output or script generation.
         """
-        lines: List[str] = []
-        # Sanitize username (prevent quote issues)
+        lines: List[str] = []  # Container for formatted action lines
+
+        # Sanitize username (remove any quotes to avoid syntax errors in the output)
         username = username.replace('"', '').replace("'", "")
+
+        # Build each formatted action line
         for code in codes:
-            # Construct the final action string
+            # Example pattern: { "?.?.<CODE>" }  : Actions ...
             line = f'{{ "?.?.{code}" }}  : Actions SET_DEST_LA("{username}"),SET_ESME_GROUP(SAG_GROUP_1, A_ADDR)'
             lines.append(line)
-        return lines
+
+        return lines  # Return list of ready-to-write formatted lines

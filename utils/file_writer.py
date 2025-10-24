@@ -1,93 +1,102 @@
 """
 utils/file_writer.py
 
-Purpose:
----------
-Small utility class that handles writing text files to disk, ensuring that
-the output directory exists before writing.
+Purpose
+-------
+Provides a lightweight utility class for safely writing text files to disk.
+Ensures that the specified output directory exists before writing any file.
 
-Responsibilities:
------------------
-- Automatically create an 'output' directory if it doesn't exist.
-- Write a list of string lines to a text file (UTF-8 encoded).
-- Return the final Path object for downstream use (e.g., logging, validation).
+Responsibilities
+----------------
+- Automatically create an output directory (default: 'output') if it doesn’t exist.
+- Write iterable lines of text to UTF-8 encoded files.
+- Return the final absolute file path for logging, validation, or downstream use.
 """
 
-from pathlib import Path       # Built-in library for object-oriented filesystem paths
-from typing import Iterable    # For type hinting collections like list[str]
+from pathlib import Path
+from typing import Iterable
 
-from utils.logger import setup_logger  # Custom logging setup utility
+from utils.logger import setup_logger
 
-# Initialize a dedicated logger for this module
+# ---------------------------------------------------------------------------
+# Module-Level Logger
+# ---------------------------------------------------------------------------
+# Create a dedicated logger instance for this module to capture file operations
 logger = setup_logger("file_writer")
 
 
 class FileWriter:
-    """Encapsulates file writing operations and directory management."""
+    """
+    Encapsulates safe file-writing operations and output directory management.
+    """
 
     def __init__(self, output_dir: str = "output"):
         """
-        Constructor — initializes a FileWriter instance.
+        Initialize a FileWriter instance.
 
         Args:
-            output_dir (str): Directory where files will be written (default = 'output').
+            output_dir (str, optional):
+                Directory where files will be written. Defaults to 'output'.
 
-        Responsibilities:
-        -----------------
-        - Store output directory as a Path object.
-        - Create the directory (and parent directories) if they do not exist.
-        - Log the resolved absolute path for transparency.
+        Notes:
+            - The directory and all parent directories will be created automatically.
+            - Logs the resolved directory path for transparency.
         """
+        # Store and prepare the output directory as a Path object
         self.output_dir = Path(output_dir)
-
-        # Create the directory if missing (parents=True handles nested paths)
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
-        logger.info("Output directory: %s", self.output_dir.resolve())
+        logger.info("Output directory initialized: %s", self.output_dir.resolve())
+
+    # -----------------------------------------------------------------------
 
     def write_text_file(self, path: Path, lines: Iterable[str]) -> Path:
         """
-        Write the provided lines into a UTF-8 encoded text file.
+        Write a list or iterable of text lines to a UTF-8 encoded file.
 
         Args:
-            path (Path | str): Destination file path (can be absolute or relative).
-            lines (Iterable[str]): Iterable of strings representing lines of text.
+            path (Path | str):
+                Destination file path. Can be absolute or relative to the output directory.
+            lines (Iterable[str]):
+                Iterable containing strings to write (e.g., list[str] or generator).
 
         Returns:
-            Path: The absolute path of the file successfully written.
+            Path: The absolute path of the successfully written file.
 
         Workflow:
-        ----------
-        1. Convert path to a Path object (if it’s a string).
-        2. If the path is relative, place it inside the output directory.
-        3. Ensure the parent directories exist before writing.
-        4. Join lines with newline characters and ensure file ends with a newline.
-        5. Write to disk using UTF-8 encoding.
-        6. Log success or catch and log any exceptions.
+            1. Normalize the file path (convert str → Path if necessary).
+            2. If path is relative, resolve it inside the configured output directory.
+            3. Ensure parent directories exist.
+            4. Join text lines with newline characters and append a final newline.
+            5. Write the file to disk with UTF-8 encoding.
+            6. Log success or record any exceptions raised.
+
+        Raises:
+            Exception: Propagates any file I/O or OS-level errors after logging them.
         """
-        # Normalize path argument to Path type
+        # Step 1: Normalize input path
         if not isinstance(path, Path):
             path = Path(path)
 
-        # If user provided a relative path, prepend the output directory
+        # Step 2: Ensure relative paths are anchored to output directory
         if not path.is_absolute():
             path = self.output_dir / path
 
-        # Make sure parent directories exist
+        # Step 3: Guarantee that parent directories exist
         path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Join all text lines with newline characters
-        # Ensures there's a trailing newline at the end of the file
+        # Step 4: Prepare text content
+        # Add a trailing newline for proper formatting in text editors
         content = "\n".join(lines) + ("\n" if lines else "")
 
         try:
-            # Write file using UTF-8 encoding (safe for text data)
+            # Step 5: Write to disk using UTF-8 encoding
             path.write_text(content, encoding="utf-8")
-            logger.info("Wrote file: %s", path.resolve())
+            logger.info("Successfully wrote file: %s", path.resolve())
         except Exception as e:
-            # Log full traceback and re-raise exception
+            # Step 6: Capture and re-raise exceptions with traceback
             logger.exception("Failed to write file %s: %s", path, e)
             raise
 
-        # Return fully resolved (absolute) file path
+        # Step 7: Return absolute file path for caller reference
         return path.resolve()
