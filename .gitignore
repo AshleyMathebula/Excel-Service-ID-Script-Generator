@@ -1,21 +1,20 @@
-# Python
+# Python bytecode
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 
-# IDE & editor settings
-.idea/
-
-# Virtual environments
+# Virtual environment
 .venv/
-venv/
-env/
 
-# OS files
-.DS_Store
-Thumbs.db
+# IDE/editor
+.idea/
+.vscode/
 
 # Logs and output
 logs/
 output/
+
+# System files
+.DS_Store
+Thumbs.db
