@@ -1,10 +1,10 @@
-🧮 Excel Service ID Script Generator
+## 🧮 Excel Service ID Script Generator
 
 A powerful interactive Python CLI tool that automates the extraction of Service_ID data from Excel workbooks and generates ready-to-use action scripts.
 
 Ideal for telecom engineers, system administrators, and integration developers handling batch configuration or routing scripts.
 
-📚 Table of Contents
+## 📚 Table of Contents
 
 Overview
 
@@ -28,7 +28,7 @@ Logging
 
 License
 
-🧠 Overview
+## 🧠 Overview
 
 The Excel Service ID Script Generator simplifies the process of scanning Excel workbooks, finding specific Service_ID values, and generating formatted configuration scripts.
 
@@ -48,7 +48,7 @@ Generate formatted script files for import or deployment.
 
 Keep detailed activity logs for traceability and audits.
 
-✨ Features
+## ✨ Features
 
 ✅ Interactive CLI with sheet selection (all or specific by number).
 ✅ Pre-generation summary showing record counts per Service_ID.
@@ -58,7 +58,7 @@ Keep detailed activity logs for traceability and audits.
 ✅ Centralized logging in logs/activity.log.
 ✅ Graceful error handling for missing files, invalid sheets, or malformed input.
 
-⚙️ Installation
+## ⚙️ Installation
 1. Clone the repository:
 git clone https://github.com/your-username/excel-service-id-generator.git
 cd excel-service-id-generator
@@ -73,7 +73,7 @@ venv\Scripts\activate
 3. Install dependencies:
 pip install -r requirements.txt
 
-🧩 Dependencies
+## 🧩 Dependencies
 
 pandas — Excel processing and data handling
 
@@ -83,7 +83,7 @@ pathlib — Path management
 
 logging — Activity tracking and debugging
 
-🚀 Usage
+## 🚀 Usage
 
 Run the tool interactively:
 
@@ -105,7 +105,7 @@ Confirm to generate scripts
 
 Scripts are saved in the output/ directory
 
-💻 Example CLI Session
+## 💻 Example CLI Session
 ================================================================================
 Excel Service ID Script Generator
 ================================================================================
@@ -147,7 +147,7 @@ Proceed to generate scripts for these records? (y/n): y
 
 🎉 Done! Processed 115 total records across selected sheets.
 
-🧾 Output Example
+## 🧾 Output Example
 
 Output Directory:
 
@@ -160,7 +160,7 @@ Example Line:
 
 { "?.?.27840001402" } : Actions SET_DEST_LA("cellfsc"), SET_ESME_GROUP(SAG_GROUP_1, A_ADDR)
 
-🗂️ Project Structure
+## 🗂️ Project Structure
 excel-service-id-generator/
 │
 ├─ data/                       # Example Excel files
@@ -176,7 +176,7 @@ excel-service-id-generator/
 ├─ requirements.txt            # Python dependencies
 └─ README.md                   # Project documentation
 
-🧩 Algorithm & Data Structures
+## 🧩 Algorithm & Data Structures
 Algorithm
 
 Implements a simple ETL pipeline:
@@ -200,7 +200,7 @@ pathlib.Path	Safe and portable file operations
 Time Complexity: O(n) per sheet
 Space Complexity: O(n) per sheet
 
-🧾 Logging
+## 🧾 Logging
 
 Logs are written both to the console and to:
 
@@ -224,7 +224,7 @@ Example:
 [INFO] 2025-10-16 15:21:14 - Selected sheets: ['Billing_Data_Sep', 'Billing_Data_Oct']
 [INFO] 2025-10-16 15:21:22 - Wrote 40 lines to output/Billing_Data_Oct_1056_script.txt
 
-📜 License
+## 📜 License
 
 MIT License © 2025
 Developed by Ashley Mathebula (@Nika)
